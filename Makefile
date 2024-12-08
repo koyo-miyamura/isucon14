@@ -72,7 +72,7 @@ copylog:
 # NOTE: alp の -m オプションの引数は適宜変更する
 analyze:
 	pt-query-digest cat /home/${ISUCON_USER}/log/slow.log > /home/${ISUCON_USER}/log/ptqd-result
-	cat /home/${ISUCON_USER}/log/nginx-access.log | alp ltsv -m "/api/player/competition/.*/ranking,/api/organizer/competition/.*/score,/api/organizer/competition/.*/finish,/api/player/player/.*,/api/organizer/player/.*/disqualified" --sort=sum -r > /home/${ISUCON_USER}/log/alp-result
+	cat /home/${ISUCON_USER}/log/nginx-access.log | alp ltsv -m "/rides/.*/evaluation,/rides/.*/status,/assets/.*,/images/.*" --sort=sum -r > /home/${ISUCON_USER}/log/alp-result
 
 # 現状のログとその解析結果を git 配下にコピー
 save-log:
