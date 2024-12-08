@@ -152,7 +152,7 @@ module Isuride
           out << "data: #{response.to_json}\n\n"
         end
 
-        sleep 0.1
+        sleep 0.05
       end
     end
 
