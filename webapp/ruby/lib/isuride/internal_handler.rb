@@ -25,15 +25,18 @@ module Isuride
                  FROM chairs
            INNER JOIN chair_locations
                    ON chair_locations.chair_id = chairs.id
-                WHERE is_active = TRUE
+                WHERE chairs.is_active = TRUE
              ORDER BY dist
       SQL
 
-      if matched
+      empty = db.xquery('SELECT COUNT(*) = 0 FROM (SELECT COUNT(chair_sent_at) = 6 AS completed FROM ride_statuses WHERE ride_id IN (SELECT id FROM rides WHERE chair_id = ?) GROUP BY ride_id) is_completed WHERE completed = FALSE', matched.fetch(:id), as: :array).first[0]
+
+      if empty > 0
         db.xquery('UPDATE rides SET chair_id = ? WHERE id = ?', matched.fetch(:id), ride.fetch(:id))
-      else
-        204
+        break
       end
+
+      204
     end
   end
 end
