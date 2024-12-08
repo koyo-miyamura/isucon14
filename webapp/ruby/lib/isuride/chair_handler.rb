@@ -77,6 +77,28 @@ module Isuride
 
       response = db_transaction do |tx|
         chair_location_id = ULID.generate
+
+        last_chair_location = tx.xquery('SELECT latitude, longitude FROM chair_locations WHERE chair_id = ? ORDER BY created_at DESC LIMIT 1', @current_chair.id).first
+
+        last_chair_latitude = 0
+        last_chair_longitude = 0
+        if last_chair_location
+          last_chair_latitude = last_chair_location.fetch(:latitude).to_i
+          last_chair_longitude = last_chair_location.fetch(:longitude).to_i
+        end
+
+        chair_total_distances = tx.xquery('SELECT total_distance FROM chair_total_distances WHERE chair_id = ?', @current_chair.id).first
+        last_total_distance = 0
+        if chair_total_distances
+          last_total_distance = chair_total_distances.fetch(:total_distance).to_i
+        end
+
+        current_distance = (req.latitude.to_i - last_chair_latitude).abs + (req.longitude.to_i - last_chair_longitude).abs
+        total_distance = last_total_distance + current_distance
+
+        current_time = Time.now
+        tx.xquery('INSERT INTO chair_total_distances (chair_id, total_distance, total_distance_updated_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE total_distance = ?, total_distance_updated_at = ?', @current_chair.id, total_distance, current_time, total_distance, current_time)
+
         tx.xquery('INSERT INTO chair_locations (id, chair_id, latitude, longitude) VALUES (?, ?, ?, ?)', chair_location_id, @current_chair.id, req.latitude, req.longitude)
 
         location = tx.xquery('SELECT * FROM chair_locations WHERE id = ?', chair_location_id).first
