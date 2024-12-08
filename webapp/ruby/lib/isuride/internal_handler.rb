@@ -20,7 +20,7 @@ module Isuride
 
       # 最も近くにある椅子を返す
       matches = db.query(<<~SQL)
-               SELECT chair.id,
+               SELECT chairs.id,
                       ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon}) AS dist
                  FROM chairs
            INNER JOIN chair_locations
