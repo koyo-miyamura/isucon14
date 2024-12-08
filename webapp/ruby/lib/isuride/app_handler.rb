@@ -316,7 +316,7 @@ module Isuride
         response = db_transaction do |tx|
           ride = tx.xquery('SELECT * FROM rides WHERE user_id = ? ORDER BY created_at DESC LIMIT 1', @current_user.id).first
           if ride.nil?
-            halt json(data: nil, retry_after_ms: 30)
+            break
           end
 
           yet_sent_ride_status = tx.xquery('SELECT * FROM ride_statuses WHERE ride_id = ? AND app_sent_at IS NULL ORDER BY created_at ASC LIMIT 1', ride.fetch(:id)).first
@@ -330,28 +330,25 @@ module Isuride
           fare = calculate_discounted_fare(tx, @current_user.id, ride, ride.fetch(:pickup_latitude), ride.fetch(:pickup_longitude), ride.fetch(:destination_latitude), ride.fetch(:destination_longitude))
 
           response = {
-            data: {
-              ride_id: ride.fetch(:id),
-              pickup_coordinate: {
-                latitude: ride.fetch(:pickup_latitude),
-                longitude: ride.fetch(:pickup_longitude),
-              },
-              destination_coordinate: {
-                latitude: ride.fetch(:destination_latitude),
-                longitude: ride.fetch(:destination_longitude),
-              },
-              fare:,
-              status:,
-              created_at: time_msec(ride.fetch(:created_at)),
-              updated_at: time_msec(ride.fetch(:updated_at)),
+            ride_id: ride.fetch(:id),
+            pickup_coordinate: {
+              latitude: ride.fetch(:pickup_latitude),
+              longitude: ride.fetch(:pickup_longitude),
             },
-            retry_after_ms: 30,
+            destination_coordinate: {
+              latitude: ride.fetch(:destination_latitude),
+              longitude: ride.fetch(:destination_longitude),
+            },
+            fare:,
+            status:,
+            created_at: time_msec(ride.fetch(:created_at)),
+            updated_at: time_msec(ride.fetch(:updated_at)),
           }
 
           unless ride.fetch(:chair_id).nil?
             chair = tx.xquery('SELECT * FROM chairs WHERE id = ?', ride.fetch(:chair_id)).first
             stats = get_chair_stats(tx, chair.fetch(:id))
-            response[:data][:chair] = {
+            response[:chair] = {
               id: chair.fetch(:id),
               name: chair.fetch(:name),
               model: chair.fetch(:model),
