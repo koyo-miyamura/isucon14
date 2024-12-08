@@ -22,8 +22,8 @@ module Isuride
 
         matches = db.query(<<~SQL)
                SELECT chairs.id,
-                      ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon})
-                       + #{dist}/chair_models.speed AS dist
+                      (ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon})
+                       + #{dist})/chair_models.speed AS dist
                  FROM chairs
            INNER JOIN chair_locations
                    ON chair_locations.chair_id = chairs.id
