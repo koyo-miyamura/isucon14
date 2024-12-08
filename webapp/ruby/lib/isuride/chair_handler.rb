@@ -75,30 +75,29 @@ module Isuride
     post '/coordinate' do
       req = bind_json(PostChairCoordinateRequest)
 
-      chair_location_id = ULID.generate
-
-      last_chair_location = db.xquery('SELECT latitude, longitude FROM chair_locations WHERE chair_id = ? ORDER BY created_at DESC LIMIT 1', @current_chair.id).first
-
-      last_chair_latitude = 0
-      last_chair_longitude = 0
-      current_distance = 0
-      if last_chair_location
-        last_chair_latitude = last_chair_location.fetch(:latitude).to_i
-        last_chair_longitude = last_chair_location.fetch(:longitude).to_i
-        current_distance = (req.latitude.to_i - last_chair_latitude).abs + (req.longitude.to_i - last_chair_longitude).abs
-      end
-
-      chair_total_distances = db.xquery('SELECT total_distance FROM chair_total_distances WHERE chair_id = ?', @current_chair.id).first
-      last_total_distance = 0
-      if chair_total_distances
-        last_total_distance = chair_total_distances.fetch(:total_distance).to_i
-      end
-
-      total_distance = last_total_distance + current_distance
-
-      current_time = Time.now
-
       response = db_transaction do |tx|
+        chair_location_id = ULID.generate
+
+        last_chair_location = tx.xquery('SELECT latitude, longitude FROM chair_locations WHERE chair_id = ? ORDER BY created_at DESC LIMIT 1', @current_chair.id).first
+
+        last_chair_latitude = 0
+        last_chair_longitude = 0
+        current_distance = 0
+        if last_chair_location
+          last_chair_latitude = last_chair_location.fetch(:latitude).to_i
+          last_chair_longitude = last_chair_location.fetch(:longitude).to_i
+          current_distance = (req.latitude.to_i - last_chair_latitude).abs + (req.longitude.to_i - last_chair_longitude).abs
+        end
+
+        chair_total_distances = tx.xquery('SELECT total_distance FROM chair_total_distances WHERE chair_id = ?', @current_chair.id).first
+        last_total_distance = 0
+        if chair_total_distances
+          last_total_distance = chair_total_distances.fetch(:total_distance).to_i
+        end
+
+        total_distance = last_total_distance + current_distance
+
+        current_time = Time.now
         tx.xquery('INSERT INTO chair_total_distances (chair_id, total_distance, total_distance_updated_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE total_distance = ?, total_distance_updated_at = ?', @current_chair.id, total_distance, current_time, total_distance, current_time)
 
         tx.xquery('INSERT INTO chair_locations (id, chair_id, latitude, longitude) VALUES (?, ?, ?, ?)', chair_location_id, @current_chair.id, req.latitude, req.longitude)
@@ -132,26 +131,26 @@ module Isuride
               'Connection'    => 'keep-alive'
 
       stream(:keep_open) do |out|
-        response = begin
-          ride = db_conn.xquery('SELECT * FROM rides WHERE chair_id = ? ORDER BY updated_at DESC LIMIT 1', @current_chair.id).first
+        response = db_transaction do |tx|
+          ride = tx.xquery('SELECT * FROM rides WHERE chair_id = ? ORDER BY updated_at DESC LIMIT 1', @current_chair.id).first
 
           unless ride
             # ride がない時は何もしなくていい
             break
           end
 
-          yet_sent_ride_status = db_conn.xquery('SELECT * FROM ride_statuses WHERE ride_id = ? AND chair_sent_at IS NULL ORDER BY created_at ASC LIMIT 1', ride.fetch(:id)).first
+          yet_sent_ride_status = tx.xquery('SELECT * FROM ride_statuses WHERE ride_id = ? AND chair_sent_at IS NULL ORDER BY created_at ASC LIMIT 1', ride.fetch(:id)).first
           status =
             if yet_sent_ride_status.nil?
-              get_latest_ride_status(db_conn, ride.fetch(:id))
+              get_latest_ride_status(tx, ride.fetch(:id))
             else
               yet_sent_ride_status.fetch(:status)
             end
 
-          user = db_conn.xquery('SELECT * FROM users WHERE id = ?', ride.fetch(:user_id)).first
+          user = tx.xquery('SELECT * FROM users WHERE id = ? FOR SHARE', ride.fetch(:user_id)).first
 
           unless yet_sent_ride_status.nil?
-            db_conn.xquery('UPDATE ride_statuses SET chair_sent_at = CURRENT_TIMESTAMP(6) WHERE id = ?', yet_sent_ride_status.fetch(:id))
+            tx.xquery('UPDATE ride_statuses SET chair_sent_at = CURRENT_TIMESTAMP(6) WHERE id = ?', yet_sent_ride_status.fetch(:id))
           end
 
           {
