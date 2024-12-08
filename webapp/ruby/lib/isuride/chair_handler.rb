@@ -133,25 +133,25 @@ module Isuride
 
       stream(:keep_open) do |out|
         response = begin
-          ride = db_conn.xquery('SELECT * FROM rides WHERE chair_id = ? ORDER BY updated_at DESC LIMIT 1', @current_chair.id).first
+          ride = db.xquery('SELECT * FROM rides WHERE chair_id = ? ORDER BY updated_at DESC LIMIT 1', @current_chair.id).first
 
           unless ride
             # ride がない時は何もしなくていい
             break
           end
 
-          yet_sent_ride_status = db_conn.xquery('SELECT * FROM ride_statuses WHERE ride_id = ? AND chair_sent_at IS NULL ORDER BY created_at ASC LIMIT 1', ride.fetch(:id)).first
+          yet_sent_ride_status = db.xquery('SELECT * FROM ride_statuses WHERE ride_id = ? AND chair_sent_at IS NULL ORDER BY created_at ASC LIMIT 1', ride.fetch(:id)).first
           status =
             if yet_sent_ride_status.nil?
-              get_latest_ride_status(db_conn, ride.fetch(:id))
+              get_latest_ride_status(db, ride.fetch(:id))
             else
               yet_sent_ride_status.fetch(:status)
             end
 
-          user = db_conn.xquery('SELECT * FROM users WHERE id = ?', ride.fetch(:user_id)).first
+          user = db.xquery('SELECT * FROM users WHERE id = ?', ride.fetch(:user_id)).first
 
           unless yet_sent_ride_status.nil?
-            db_conn.xquery('UPDATE ride_statuses SET chair_sent_at = CURRENT_TIMESTAMP(6) WHERE id = ?', yet_sent_ride_status.fetch(:id))
+            db.xquery('UPDATE ride_statuses SET chair_sent_at = CURRENT_TIMESTAMP(6) WHERE id = ?', yet_sent_ride_status.fetch(:id))
           end
 
           {
