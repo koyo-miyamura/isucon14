@@ -141,10 +141,13 @@ module Isuride
         }
       end
 
-      content_type :event_stream
+      headers 'Content-Type' => 'text/event-stream',
+              'Cache-Control' => 'no-cache',
+              'Connection'    => 'keep-alive'
+
       stream(:keep_open) do |out|
-        out << "data: #{response.to_json}"
-        out.close
+        out << "data: #{response.to_json}\n\n"
+        sleep 0.1
       end
     end
 
