@@ -313,7 +313,8 @@ module Isuride
               'Connection'    => 'keep-alive'
 
       stream(:keep_open) do |out|
-        response = db_transaction do |tx|
+        response = begin
+          tx = db
           ride = tx.xquery('SELECT * FROM rides WHERE user_id = ? ORDER BY created_at DESC LIMIT 1', @current_user.id).first
           if ride.nil?
             break
