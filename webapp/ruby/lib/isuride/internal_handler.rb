@@ -13,13 +13,25 @@ module Isuride
         halt 204
       end
 
-      10.times do
-        matched = db.query('SELECT * FROM chairs INNER JOIN (SELECT id FROM chairs WHERE is_active = TRUE ORDER BY RAND() LIMIT 1) AS tmp ON chairs.id = tmp.id LIMIT 1').first
-        unless matched
-          halt 204
-        end
 
+      # 基準点
+      lat = ride[:pickup_latitude]
+      lon = ride[:pickup_longitude]
+
+      # 最も近くにある椅子を返す
+      matches = db.query(<<~SQL)
+               SELECT chairs.id,
+                      ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon}) AS dist
+                 FROM chairs
+           INNER JOIN chair_locations
+                   ON chair_locations.chair_id = chairs.id
+                WHERE chairs.is_active = TRUE
+             ORDER BY dist
+      SQL
+
+      matches.each do |matched|
         empty = db.xquery('SELECT COUNT(*) = 0 FROM (SELECT COUNT(chair_sent_at) = 6 AS completed FROM ride_statuses WHERE ride_id IN (SELECT id FROM rides WHERE chair_id = ?) GROUP BY ride_id) is_completed WHERE completed = FALSE', matched.fetch(:id), as: :array).first[0]
+
         if empty > 0
           db.xquery('UPDATE rides SET chair_id = ? WHERE id = ?', matched.fetch(:id), ride.fetch(:id))
           break
