@@ -92,7 +92,6 @@ cleanlog:
 # sudo systemctl restart memcached.service
 restart:
 	sudo systemctl restart nginx
-	sudo systemctl restart mysql
 	sudo systemctl restart isuride-ruby.service
 	sudo systemctl restart isuride-matcher.service
 
