@@ -92,6 +92,7 @@ CREATE TABLE rides
   evaluation            INTEGER     NULL     COMMENT '評価',
   created_at            DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '要求日時',
   updated_at            DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '状態更新日時',
+  INDEX `idx_chair_id_created_at` (`chair_id`, `created_at` DESC),
   INDEX `idx_chair_id_updated_at` (`chair_id`, `updated_at` DESC),
   INDEX `idx_user_id_created_at` (`user_id`, `created_at` DESC),
   PRIMARY KEY (id)
