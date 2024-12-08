@@ -1,0 +1,658 @@
+
+# 33.2s user time, 70ms system time, 35.64M rss, 41.67M vsz
+# Current date: Sun Dec  8 06:58:44 2024
+# Hostname: ip-192-168-0-11
+# Files: /home/isucon/log/slow.log
+# Overall: 354.72k total, 128 unique, 1.90k QPS, 0.79x concurrency _______
+# Time range: 2024-12-08T06:55:03 to 2024-12-08T06:58:10
+# Attribute          total     min     max     avg     95%  stddev  median
+# ============     ======= ======= ======= ======= ======= ======= =======
+# Exec time           148s     2us   590ms   416us     1ms     3ms   167us
+# Lock time          679ms       0    17ms     1us     1us    92us     1us
+# Rows sent        430.48k       0   2.65k    1.24    4.96   24.11       0
+# Rows examine     1019.51k       0  41.50k    2.94    4.96  228.04    0.99
+# Query size        26.55M       5 1011.33k   78.49  124.25   2.63k   88.31
+
+# Profile
+# Rank Query ID                      Response time Calls R/Call V/M   Item
+# ==== ============================= ============= ===== ====== ===== ====
+#    1 0xFFFCA4D67EA0A788813031B8... 35.1942 23.8% 34782 0.0010  0.01 COMMIT
+#    2 0xDCA6B16A0FC65C799EB401CB... 15.5378 10.5% 35231 0.0004  0.00 SELECT ride_statuses
+#    3 0xD8DAD8AC6EDE2238F17AC39B... 15.3405 10.4% 44049 0.0003  0.00 SELECT rides
+#    4 0x9C1BE9A08595D62A20896346... 12.7205  8.6% 27319 0.0005  0.00 SELECT ride_statuses
+#    5 0x49D4717E21912CD8B13961B8...  8.1701  5.5%  2956 0.0028  0.33 SELECT chairs
+#    6 0x780A355BC10F6DC5B57B4BBC...  7.8970  5.3% 17574 0.0004  0.00 SELECT ride_statuses
+#    7 0x5CAA8168B7B8D221E74FB978...  5.9765  4.0% 13714 0.0004  0.00 SELECT ride_statuses
+#    8 0xEA001BE95AEC4D5ADE8560ED...  5.1949  3.5% 13303 0.0004  0.00 SELECT rides
+#    9 0xE13EB9FE8E585FDE0A4C67FE...  4.9454  3.3% 13714 0.0004  0.00 SELECT rides
+#   10 0x98A61FDF32A0B9CE3F4E78D7...  4.7484  3.2% 17574 0.0003  0.00 SELECT users
+#   11 0xA3B0C1486434871B20F519E7...  4.6243  3.1% 13891 0.0003  0.00 SELECT coupons
+#   12 0x8D589AFA4DFAEEED85FFF5AA...  3.4420  2.3% 58529 0.0001  0.00 BEGIN
+#   13 0xCFFC94E76B6CE58F0631F31E...  3.0883  2.1% 13343 0.0002  0.00 SELECT chairs
+#   14 0x15179FAF88D6624952F72D75...  2.7281  1.8%    78 0.0350  0.01 SELECT chairs chair_locations chair_models
+#   15 0xDB862F633DEA18D750C8371D...  1.6223  1.1%   574 0.0028  0.21 SELECT users
+#   16 0xB0AE779644A57E46DF4331A9...  1.5892  1.1%  2728 0.0006  0.00 SELECT chair_locations
+#   17 0xFFF66E9B3D962FA319C8068B...  1.4208  1.0% 23747 0.0001  0.00 ROLLBACK
+#   18 0xCCC5EFD9F93156DD3A1F76D2...  1.0243  0.7%  2731 0.0004  0.00 SELECT rides
+#   19 0xD2D38076E399D482E9094817...  0.9870  0.7%  2728 0.0004  0.00 INSERT chair_locations
+#   20 0xD9B2E7D1ACD05AE0B9816F78...  0.9518  0.6%  2728 0.0003  0.00 INSERT UPDATE chair_total_distances
+# MISC 0xMISC                        10.5723  7.2% 13425 0.0008   0.0 <108 ITEMS>
+
+# Query 1: 527 QPS, 0.53x concurrency, ID 0xFFFCA4D67EA0A788813031B8BBC3B329 at byte 3444899
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.01
+# Time range: 2024-12-08T06:55:07 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          9   34782
+# Exec time     23     35s    22us    27ms     1ms     8ms     3ms    44us
+# Lock time      0       0       0       0       0       0       0       0
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     0 203.80k       6       6       6       6       0       6
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  ################################################################
+# 100us  ######
+#   1ms  #######
+#  10ms  ##
+# 100ms
+#    1s
+#  10s+
+COMMIT\G
+
+# Query 2: 542.02 QPS, 0.24x concurrency, ID 0xDCA6B16A0FC65C799EB401CBD984EACF at byte 49738207
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          9   35231
+# Exec time     10     16s   118us    28ms   441us     2ms   586us   204us
+# Lock time      7    48ms       0     1ms     1us     1us    14us     1us
+# Rows sent      7  34.41k       1       1       1       1       0       1
+# Rows examine   3  34.41k       1       3    1.00    0.99    0.01    0.99
+# Query size    13   3.70M     110     110     110     110       0     110
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ########
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'ride_statuses'\G
+#    SHOW CREATE TABLE `isuride`.`ride_statuses`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT status FROM ride_statuses WHERE ride_id = '01JEJGTVPSPKVHBW27W54NDZ5J' ORDER BY created_at DESC LIMIT 1\G
+
+# Query 3: 242.03 QPS, 0.08x concurrency, ID 0xD8DAD8AC6EDE2238F17AC39B0009258F at byte 65439810
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:58:10
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         12   44049
+# Exec time     10     15s   128us    13ms   348us     1ms   456us   194us
+# Lock time      9    63ms       0     1ms     1us     1us    11us     1us
+# Rows sent      4  19.79k       0       1    0.46    0.99    0.49       0
+# Rows examine   1  19.79k       0       1    0.46    0.99    0.49       0
+# Query size    15   4.12M      98      98      98      98       0      98
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ####
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'rides'\G
+#    SHOW CREATE TABLE `isuride`.`rides`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM rides WHERE chair_id = '01JEJGT9H37FPT0S9WPEAX2Y7F' ORDER BY updated_at DESC LIMIT 1\G
+
+# Query 4: 440.63 QPS, 0.21x concurrency, ID 0x9C1BE9A08595D62A208963461F89E6D8 at byte 29256024
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:11 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          7   27319
+# Exec time      8     13s   128us    11ms   465us     2ms   575us   236us
+# Lock time      5    34ms       0     1ms     1us     1us    12us     1us
+# Rows sent     28 121.68k       1       6    4.56    5.75    1.88    5.75
+# Rows examine  11 121.68k       1       6    4.56    5.75    1.88    5.75
+# Query size     9   2.40M      92      92      92      92       0      92
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ########
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'ride_statuses'\G
+#    SHOW CREATE TABLE `isuride`.`ride_statuses`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM ride_statuses WHERE ride_id = '01JEJGTKC0RVJMHZRQR5W0WKWD' ORDER BY created_at\G
+
+# Query 5: 49.27 QPS, 0.14x concurrency, ID 0x49D4717E21912CD8B13961B8248A27CF at byte 3492297
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.33
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0    2956
+# Exec time      5      8s    97us   590ms     3ms   761us    30ms   144us
+# Lock time      1     7ms     1us     1ms     2us     1us    23us     1us
+# Rows sent      0   2.89k       1       1       1       1       0       1
+# Rows examine   0   2.89k       1       1       1       1       0       1
+# Query size     1 311.77k     108     108     108     108       0     108
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  #
+# 100us  ################################################################
+#   1ms  #
+#  10ms  #
+# 100ms  #
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chairs'\G
+#    SHOW CREATE TABLE `isuride`.`chairs`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM chairs WHERE access_token = '36892aa5c5261a92fbc5521ba648b348f2354af2eb344af6e9895cb28bffcc52'\G
+
+# Query 6: 283.45 QPS, 0.13x concurrency, ID 0x780A355BC10F6DC5B57B4BBCC1A9703E at byte 70991380
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:11 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          4   17574
+# Exec time      5      8s   133us    13ms   449us     2ms   589us   214us
+# Lock time      3    22ms       0   710us     1us     1us     8us     1us
+# Rows sent      0     400       0       1    0.02       0    0.15       0
+# Rows examine   0   5.00k       0       1    0.29    0.99    0.45       0
+# Query size     8   2.18M     130     130     130     130       0     130
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ########
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'ride_statuses'\G
+#    SHOW CREATE TABLE `isuride`.`ride_statuses`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM ride_statuses WHERE ride_id = '01JEJGV67BHH65VMKKDS7SDE25' AND chair_sent_at IS NULL ORDER BY created_at ASC LIMIT 1\G
+
+# Query 7: 217.68 QPS, 0.09x concurrency, ID 0x5CAA8168B7B8D221E74FB978834E34B2 at byte 71018443
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:10 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          3   13714
+# Exec time      4      6s   142us    12ms   435us     2ms   585us   214us
+# Lock time      3    23ms       0     1ms     1us     1us    19us     1us
+# Rows sent      0     400       0       1    0.03       0    0.17       0
+# Rows examine   0   4.64k       0       1    0.35    0.99    0.47       0
+# Query size     6   1.67M     128     128     128     128       0     128
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  #######
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'ride_statuses'\G
+#    SHOW CREATE TABLE `isuride`.`ride_statuses`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM ride_statuses WHERE ride_id = '01JEJGV4EFWJPEQ4SXGRXB7KH2' AND app_sent_at IS NULL ORDER BY created_at ASC LIMIT 1\G
+
+# Query 8: 214.56 QPS, 0.08x concurrency, ID 0xEA001BE95AEC4D5ADE8560ED11FDEDFF at byte 54220587
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:11 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          3   13303
+# Exec time      3      5s   127us    11ms   390us     1ms   497us   194us
+# Lock time      2    18ms       0   908us     1us     1us    13us     1us
+# Rows sent      6  26.68k       1       5    2.05    3.89    1.02    1.96
+# Rows examine   2  26.68k       1       5    2.05    3.89    1.02    1.96
+# Query size     4   1.14M      90      90      90      90       0      90
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ######
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'rides'\G
+#    SHOW CREATE TABLE `isuride`.`rides`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM rides WHERE chair_id = '01JEJGSTT55MCZF5ACPTGAKNBV' ORDER BY updated_at DESC\G
+
+# Query 9: 217.68 QPS, 0.08x concurrency, ID 0xE13EB9FE8E585FDE0A4C67FEB1D9D015 at byte 29695472
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:10 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          3   13714
+# Exec time      3      5s   109us    21ms   360us     1ms   491us   176us
+# Lock time      3    23ms       0     1ms     1us     1us    16us     1us
+# Rows sent      3  13.39k       1       1       1       1       0       1
+# Rows examine   1  13.39k       1       1       1       1       0       1
+# Query size     4   1.27M      97      97      97      97       0      97
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ######
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'rides'\G
+#    SHOW CREATE TABLE `isuride`.`rides`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM rides WHERE user_id = '01JEJGSTWCQ1QMMVZH7YAFC9ZW' ORDER BY created_at DESC LIMIT 1\G
+
+# Query 10: 283.45 QPS, 0.08x concurrency, ID 0x98A61FDF32A0B9CE3F4E78D731745F30 at byte 85081412
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:11 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          4   17574
+# Exec time      3      5s    81us     6ms   270us   972us   361us   125us
+# Lock time      3    27ms       0     1ms     1us     1us    19us     1us
+# Rows sent      3  17.16k       1       1       1       1       0       1
+# Rows examine   1  17.16k       1       1       1       1       0       1
+# Query size     4   1.16M      69      69      69      69       0      69
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  ##
+# 100us  ################################################################
+#   1ms  ###
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'users'\G
+#    SHOW CREATE TABLE `isuride`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM users WHERE id = '01JEJGVB1HGKNA19PB08ESH789' FOR SHARE\G
+
+# Query 11: 213.71 QPS, 0.07x concurrency, ID 0xA3B0C1486434871B20F519E77C3FD9E6 at byte 75297007
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          3   13891
+# Exec time      3      5s    95us    11ms   332us     1ms   435us   159us
+# Lock time      2    20ms       0     2ms     1us     1us    20us     1us
+# Rows sent      2  10.66k       0       1    0.79    0.99    0.41    0.99
+# Rows examine   1  10.66k       0       1    0.79    0.99    0.41    0.99
+# Query size     3 895.32k      66      66      66      66       0      66
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  #
+# 100us  ################################################################
+#   1ms  #####
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'coupons'\G
+#    SHOW CREATE TABLE `isuride`.`coupons`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM coupons WHERE used_by = '01JEJGVH5TDT6347FEW1AN4ESF'\G
+
+# Query 12: 319.83 QPS, 0.02x concurrency, ID 0x8D589AFA4DFAEEED85FFF5AA78E5FF6A at byte 46023519
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:07 to 2024-12-08T06:58:10
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count         16   58529
+# Exec time      2      3s    20us     5ms    58us   131us   102us    36us
+# Lock time      0       0       0       0       0       0       0       0
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     1 285.79k       5       5       5       5       0       5
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  ################################################################
+# 100us  ####
+#   1ms  #
+#  10ms
+# 100ms
+#    1s
+#  10s+
+BEGIN\G
+
+# Query 13: 205.28 QPS, 0.05x concurrency, ID 0xCFFC94E76B6CE58F0631F31EF2EB78A5 at byte 44535763
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:13
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          3   13343
+# Exec time      2      3s    80us     4ms   231us   799us   295us   119us
+# Lock time      2    18ms       0     1ms     1us     1us    14us     1us
+# Rows sent      3  13.03k       1       1       1       1       0       1
+# Rows examine   1  13.03k       1       1       1       1       0       1
+# Query size     2 781.82k      60      60      60      60       0      60
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  ###
+# 100us  ################################################################
+#   1ms  ##
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chairs'\G
+#    SHOW CREATE TABLE `isuride`.`chairs`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM chairs WHERE id = '01JEJGSTP9XP24802GGKG4VTK5'\G
+
+# Query 14: 1.39 QPS, 0.05x concurrency, ID 0x15179FAF88D6624952F72D754A0DD108 at byte 77687121
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.01
+# Time range: 2024-12-08T06:55:11 to 2024-12-08T06:56:07
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0      78
+# Exec time      1      3s     3ms   100ms    35ms    71ms    23ms    31ms
+# Lock time      0   189us     1us     4us     2us     2us       0     1us
+# Rows sent     22  98.69k      20   2.65k   1.27k   2.50k  826.10   1.14k
+# Rows examine  63 648.81k   1.62k  41.50k   8.32k  40.32k  12.43k   3.52k
+# Query size     0  27.29k     356     360  358.33  346.17       0  346.17
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us
+#   1ms  ##############
+#  10ms  ################################################################
+# 100ms  #
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chairs'\G
+#    SHOW CREATE TABLE `isuride`.`chairs`\G
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chair_locations'\G
+#    SHOW CREATE TABLE `isuride`.`chair_locations`\G
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chair_models'\G
+#    SHOW CREATE TABLE `isuride`.`chair_models`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT chairs.id,
+           ABS(chair_locations.latitude - 37) + ABS(chair_locations.longitude - 45)
+            + 74/chair_models.speed AS dist
+      FROM chairs
+INNER JOIN chair_locations
+        ON chair_locations.chair_id = chairs.id
+INNER JOIN chair_models
+        ON chair_models.name = chairs.model
+     WHERE chairs.is_active = TRUE
+  ORDER BY dist\G
+
+# Query 15: 9.57 QPS, 0.03x concurrency, ID 0xDB862F633DEA18D750C8371D2E984DDF at byte 3503140
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.21
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0     574
+# Exec time      1      2s   107us   378ms     3ms   799us    24ms   152us
+# Lock time      0   848us     1us     9us     1us     1us       0     1us
+# Rows sent      0     574       1       1       1       1       0       1
+# Rows examine   0     574       1       1       1       1       0       1
+# Query size     0  59.98k     107     107     107     107       0     107
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  #
+#  10ms  #
+# 100ms  #
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'users'\G
+#    SHOW CREATE TABLE `isuride`.`users`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM users WHERE access_token = 'f1e430292561abc51685043263b83171f23baecd0e758b4daa9a87af320cceae'\G
+
+# Query 16: 45.47 QPS, 0.03x concurrency, ID 0xB0AE779644A57E46DF4331A918F18AE8 at byte 54200178
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0    2728
+# Exec time      1      2s   123us    11ms   582us     2ms   680us   301us
+# Lock time      1     7ms       0     1ms     2us     1us    34us     1us
+# Rows sent      0   2.63k       0       1    0.99    0.99    0.11    0.99
+# Rows examine   0   2.63k       0       1    0.99    0.99    0.11    0.99
+# Query size     1 335.67k     126     126     126     126       0     126
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ###########
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chair_locations'\G
+#    SHOW CREATE TABLE `isuride`.`chair_locations`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT latitude, longitude FROM chair_locations WHERE chair_id = '01JEJGSTP9XP24802GGKG4VTK5' ORDER BY created_at DESC LIMIT 1\G
+
+# Query 17: 130.48 QPS, 0.01x concurrency, ID 0xFFF66E9B3D962FA319C8068B5C1997CD at byte 3510116
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:58:10
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          6   23747
+# Exec time      0      1s    26us    10ms    59us   103us   116us    38us
+# Lock time      0       0       0       0       0       0       0       0
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     0 185.52k       8       8       8       8       0       8
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us  ################################################################
+# 100us  ###
+#   1ms  #
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+ROLLBACK\G
+
+# Query 18: 47.91 QPS, 0.02x concurrency, ID 0xCCC5EFD9F93156DD3A1F76D259AF181D at byte 72829676
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:09 to 2024-12-08T06:56:06
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0    2731
+# Exec time      0      1s   114us     6ms   375us     1ms   461us   176us
+# Lock time      0     6ms       0     1ms     2us     1us    33us     1us
+# Rows sent      0   1.82k       0       1    0.68    0.99    0.46    0.99
+# Rows examine   0   1.82k       0       1    0.68    0.99    0.46    0.99
+# Query size     0 261.37k      98      98      98      98       0      98
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  ######
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'rides'\G
+#    SHOW CREATE TABLE `isuride`.`rides`\G
+# EXPLAIN /*!50100 PARTITIONS*/
+SELECT * FROM rides WHERE chair_id = '01JEJGSTMB2RWEDBGZV1CHASM4' ORDER BY created_at DESC LIMIT 1\G
+
+# Query 19: 45.47 QPS, 0.02x concurrency, ID 0xD2D38076E399D482E9094817365408E9 at byte 27808276
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0    2728
+# Exec time      0   987ms   105us     5ms   361us     1ms   442us   167us
+# Lock time      0     4ms       0   551us     1us     1us    11us     1us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     1 384.35k     141     145  144.27  143.84       2  143.84
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  #####
+#  10ms
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chair_locations'\G
+#    SHOW CREATE TABLE `isuride`.`chair_locations`\G
+INSERT INTO chair_locations (id, chair_id, latitude, longitude) VALUES ('01JEJGTK233M8RHH2PETJ65RRT', '01JEJGTBAF1BSX0J2HH9KYDM5Q', '328', '301')\G
+
+# Query 20: 45.47 QPS, 0.02x concurrency, ID 0xD9B2E7D1ACD05AE0B9816F78A0B826E9 at byte 54249925
+# This item is included in the report because it matches --limit.
+# Scores: V/M = 0.00
+# Time range: 2024-12-08T06:55:08 to 2024-12-08T06:56:08
+# Attribute    pct   total     min     max     avg     95%  stddev  median
+# ============ === ======= ======= ======= ======= ======= ======= =======
+# Count          0    2728
+# Exec time      0   952ms   107us    10ms   348us     1ms   457us   185us
+# Lock time      0     4ms       0     1ms     1us     1us    19us     1us
+# Rows sent      0       0       0       0       0       0       0       0
+# Rows examine   0       0       0       0       0       0       0       0
+# Query size     2 710.69k     265     269  266.77  258.32       0  258.32
+# String:
+# Databases    isuride
+# Hosts        localhost
+# Users        isucon
+# Query_time distribution
+#   1us
+#  10us
+# 100us  ################################################################
+#   1ms  #####
+#  10ms  #
+# 100ms
+#    1s
+#  10s+
+# Tables
+#    SHOW TABLE STATUS FROM `isuride` LIKE 'chair_total_distances'\G
+#    SHOW CREATE TABLE `isuride`.`chair_total_distances`\G
+INSERT INTO chair_total_distances (chair_id, total_distance, total_distance_updated_at) VALUES ('01JEJGSTP9XP24802GGKG4VTK5', '785', '2024-12-08 06:55:51.481357') ON DUPLICATE KEY UPDATE total_distance = '785', total_distance_updated_at = '2024-12-08 06:55:51.481357'\G
