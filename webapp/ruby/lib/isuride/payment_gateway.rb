@@ -19,6 +19,7 @@ module Isuride
 
     def request_post_payment(param, &retrieve_rides_order_by_created_at_asc)
       b = JSON.dump(param)
+      uuid = SecureRandom.uuid
 
       # 失敗したらとりあえずリトライ
       # FIXME: 社内決済マイクロサービスのインフラに異常が発生していて、同時にたくさんリクエストすると変なことになる可能性あり
@@ -30,6 +31,7 @@ module Isuride
           req.body = b
           req['Content-Type'] = 'application/json'
           req['Authorization'] = "Bearer #{@token}"
+          req['Idempotency-Key'] = uuid
 
           res = http.request(req)
 
