@@ -44,10 +44,8 @@ install-memcached:
 # 本番のサーバー構成に合わせて適宜書き換える
 set-nginxconf:
 	sudo rsync -rv conf/nginx/nginx.conf /etc/nginx/nginx.conf
-	sudo rsync -rv conf/nginx/sites-enabled/* /etc/nginx/sites-enabled
 	sudo rsync -rv conf/nginx/sites-available/* /etc/nginx/sites-available
 	sudo chown ${NGINX_USER}:${NGINX_GROUP} /etc/nginx/nginx.conf
-	sudo chown -R ${NGINX_USER}:${NGINX_GROUP} /etc/nginx/sites-enabled
 	sudo chown -R ${NGINX_USER}:${NGINX_GROUP} /etc/nginx/sites-available
 
 set-mysqlconf:
@@ -57,10 +55,8 @@ set-mysqlconf:
 # 本番のサーバー構成に合わせて適宜書き換える
 get-nginxconf:
 	sudo rsync -rv /etc/nginx/nginx.conf conf/nginx
-	sudo rsync -rv /etc/nginx/sites-enabled/* conf/nginx/sites-enabled
 	sudo rsync -rv /etc/nginx/sites-available/* conf/nginx/sites-available
 	sudo chown ${ISUCON_USER}:${ISUCON_GROUP} conf/nginx/nginx.conf
-	sudo chown -R ${ISUCON_USER}:${ISUCON_GROUP} conf/nginx/sites-enabled
 	sudo chown -R ${ISUCON_USER}:${ISUCON_GROUP} conf/nginx/sites-available
 
 get-mysqlconf:
