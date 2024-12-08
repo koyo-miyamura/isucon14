@@ -19,7 +19,7 @@ module Isuride
       lon = ride[:pickup_longitude]
 
       # 最も近くにある椅子を返す
-      matched = db.query(<<~SQL).first
+      matches = db.query(<<~SQL)
                SELECT chair.id,
                       ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon}) AS dist
                  FROM chairs
@@ -29,11 +29,13 @@ module Isuride
              ORDER BY dist
       SQL
 
-      empty = db.xquery('SELECT COUNT(*) = 0 FROM (SELECT COUNT(chair_sent_at) = 6 AS completed FROM ride_statuses WHERE ride_id IN (SELECT id FROM rides WHERE chair_id = ?) GROUP BY ride_id) is_completed WHERE completed = FALSE', matched.fetch(:id), as: :array).first[0]
+      matches.each do |matched|
+        empty = db.xquery('SELECT COUNT(*) = 0 FROM (SELECT COUNT(chair_sent_at) = 6 AS completed FROM ride_statuses WHERE ride_id IN (SELECT id FROM rides WHERE chair_id = ?) GROUP BY ride_id) is_completed WHERE completed = FALSE', matched.fetch(:id), as: :array).first[0]
 
-      if empty > 0
-        db.xquery('UPDATE rides SET chair_id = ? WHERE id = ?', matched.fetch(:id), ride.fetch(:id))
-        break
+        if empty > 0
+          db.xquery('UPDATE rides SET chair_id = ? WHERE id = ?', matched.fetch(:id), ride.fetch(:id))
+          break
+        end
       end
 
       204
