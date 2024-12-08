@@ -40,6 +40,7 @@ module Isuride
       SQL
 
       db.xquery('ALTER TABLE chair_total_distances ADD UNIQUE INDEX `idx_chair_id` (`chair_id`)')
+      db.xquery('ALTER TABLE chair_total_distances MODIFY COLUMN total_distance_updated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)')
 
       json(language: 'ruby')
     end

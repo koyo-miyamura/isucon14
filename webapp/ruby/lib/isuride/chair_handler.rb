@@ -96,10 +96,8 @@ module Isuride
 
       total_distance = last_total_distance + current_distance
 
-      current_time = Time.now
-
       response = db_transaction do |tx|
-        tx.xquery('INSERT INTO chair_total_distances (chair_id, total_distance, total_distance_updated_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE total_distance = ?, total_distance_updated_at = ?', @current_chair.id, total_distance, current_time, total_distance, current_time)
+        tx.xquery('INSERT INTO chair_total_distances (chair_id, total_distance) VALUES (?, ?) ON DUPLICATE KEY UPDATE total_distance = ?', @current_chair.id, total_distance, total_distance)
 
         tx.xquery('INSERT INTO chair_locations (id, chair_id, latitude, longitude) VALUES (?, ?, ?, ?)', chair_location_id, @current_chair.id, req.latitude, req.longitude)
 
