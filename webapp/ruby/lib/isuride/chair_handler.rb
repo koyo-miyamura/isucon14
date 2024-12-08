@@ -82,9 +82,11 @@ module Isuride
 
         last_chair_latitude = 0
         last_chair_longitude = 0
+        current_distance = 0
         if last_chair_location
           last_chair_latitude = last_chair_location.fetch(:latitude).to_i
           last_chair_longitude = last_chair_location.fetch(:longitude).to_i
+          current_distance = (req.latitude.to_i - last_chair_latitude).abs + (req.longitude.to_i - last_chair_longitude).abs
         end
 
         chair_total_distances = tx.xquery('SELECT total_distance FROM chair_total_distances WHERE chair_id = ?', @current_chair.id).first
@@ -93,7 +95,6 @@ module Isuride
           last_total_distance = chair_total_distances.fetch(:total_distance).to_i
         end
 
-        current_distance = (req.latitude.to_i - last_chair_latitude).abs + (req.longitude.to_i - last_chair_longitude).abs
         total_distance = last_total_distance + current_distance
 
         current_time = Time.now
