@@ -13,13 +13,22 @@ module Isuride
         lat = ride[:pickup_latitude]
         lon = ride[:pickup_longitude]
 
-        # 最も近くにある椅子を返す
+        # 目的地
+        lat2 = ride[:destination_latitude]
+        lon2 = ride[:destination_longitude]
+
+        # 目的地への距離
+        dist = calculate_distance(lat, lon, lat2, lon2)
+
         matches = db.query(<<~SQL)
                SELECT chairs.id,
-                      ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon}) AS dist
+                      ABS(chair_locations.latitude - #{lat}) + ABS(chair_locations.longitude - #{lon})
+                       + #{dist}/chair_models.speed AS dist
                  FROM chairs
            INNER JOIN chair_locations
                    ON chair_locations.chair_id = chairs.id
+           INNER JOIN chair_models
+                   ON chair_models.name = chairs.model
                 WHERE chairs.is_active = TRUE
              ORDER BY dist
         SQL
