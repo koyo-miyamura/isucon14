@@ -124,27 +124,28 @@ module Isuride
         end
 
         {
-          data: {
-            ride_id: ride.fetch(:id),
-            user: {
-              id: user.fetch(:id),
-              name: "#{user.fetch(:firstname)} #{user.fetch(:lastname)}",
-            },
-            pickup_coordinate: {
-              latitude: ride.fetch(:pickup_latitude),
-              longitude: ride.fetch(:pickup_longitude),
-            },
-            destination_coordinate: {
-              latitude: ride.fetch(:destination_latitude),
-              longitude: ride.fetch(:destination_longitude),
-            },
-            status:,
+          ride_id: ride.fetch(:id),
+          user: {
+            id: user.fetch(:id),
+            name: "#{user.fetch(:firstname)} #{user.fetch(:lastname)}",
           },
-          retry_after_ms: 30,
+          pickup_coordinate: {
+            latitude: ride.fetch(:pickup_latitude),
+            longitude: ride.fetch(:pickup_longitude),
+          },
+          destination_coordinate: {
+            latitude: ride.fetch(:destination_latitude),
+            longitude: ride.fetch(:destination_longitude),
+          },
+          status:,
         }
       end
 
-      json(response)
+      content_type :event_stream
+      stream(:keep_open) do |out|
+        out << "data: #{response.to_json}"
+        out.close
+      end
     end
 
     PostChairRidesRideIDStatusRequest = Data.define(:status)
