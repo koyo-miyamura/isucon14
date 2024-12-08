@@ -94,6 +94,7 @@ restart:
 	sudo systemctl restart nginx
 	sudo systemctl restart mysql
 	sudo systemctl restart isuride-ruby.service
+	sudo systemctl restart isuride-matcher.service
 
 # ベンチ回す前の準備
 prepare-bench: set-nginxconf set-mysqlconf restart cleanlog save-log
